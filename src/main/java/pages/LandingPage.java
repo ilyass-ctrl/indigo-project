@@ -4,12 +4,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class LandingPage {
+public class LandingPage extends BasePage {
 
-	protected WebDriver driver = null;
+	
 
 	public LandingPage(WebDriver driver) {
-		this.driver = driver; 
+		super(driver);
 	}
 
 	@FindBy (css ="[aria-label='Close Popup']")

@@ -1,53 +1,73 @@
 package tests;
 
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+
 import pages.LandingPage;
 import pages.OpinionLabPage;
 
-import org.testng.annotations.BeforeTest;
-
 import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
 
 public class FeedBack_SideBar_Test {
-
-	WebDriver driver;
-	LandingPage landingPage;
-	OpinionLabPage opinionLabPage;
-	String winHandle = null;
-	String parentHandle;
+	
+	protected WebDriver driver;
+	protected LandingPage landingPage;
+	protected OpinionLabPage opinionLabPage;
+	protected String parentHandle;
 
 	@BeforeTest
-	public void setUp() {
+	public void setUp() throws Exception  {
 
-		File file = new File("C:\\Users\\Saighi Ilyass\\Desktop\\Web Automation\\WebDrivers\\chromedriver.exe");
-		System.setProperty("webdriver.chrome.driver",file.getAbsolutePath() );
+		Properties browserConfigProps = new Properties();
 
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--start-maximized");
-		//options.addArguments("--headless");
+		FileInputStream file = new FileInputStream("config.cfg");
 
-		driver = new ChromeDriver(options);
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		browserConfigProps.load(file);
+		
+		String browserType = browserConfigProps.getProperty("browser");
 
+		if (browserType.equalsIgnoreCase("CHROME")) {
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("--start-maximized");
+			//options.addArguments("--headless");
+			
+			File chromeDriver_Directory = new File("C:\\Users\\Saighi Ilyass\\Desktop\\Web Automation\\WebDrivers\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", chromeDriver_Directory.getAbsolutePath());
+			driver = new ChromeDriver(options);
+			
+		
+		}else if(browserType.equalsIgnoreCase("FIREFOX")) {
+			
+			File firefoxDriver_Directory = new File("C:\\Users\\Saighi Ilyass\\Desktop\\Web Automation\\WebDrivers\\geckodriver.exe");
+			System.setProperty("webdriver.gecko.driver", firefoxDriver_Directory.getAbsolutePath());
+			driver = new FirefoxDriver();
+			driver.manage().window().maximize();
+		}
+		
 		driver.get("https://www.chapters.indigo.ca/en-ca/");
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		
 		landingPage = PageFactory.initElements(driver, LandingPage.class);
-
 		parentHandle = driver.getWindowHandle();
-
 	}
 
 	@AfterTest
 	public void tearDown() {
-		driver.close();
+		driver.quit();
 	}
+
 
 	@Test(priority = 1, groups = {"Regression", "Smoke", "Sanity"})
 	public void websiteFeedBack_opening() {
