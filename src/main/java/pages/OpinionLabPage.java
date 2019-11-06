@@ -3,56 +3,58 @@ package pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class OpinionLabPage {
-	
+
 	protected WebDriver driver = null;
-	protected String comment;
-	
+	protected WebDriverWait wait;
+
 	public OpinionLabPage (WebDriver driver) {
 		this.driver = driver;
+		wait = new WebDriverWait(driver, 30);
 	}
-	
-	@FindBy (css = "")
+
+	@FindBy (css = "#overall-icon-5")
 	WebElement overAll_rating_elem;
-	
-	@FindBy (css = "")
+
+	@FindBy (css = "#comment-textarea")
 	WebElement comments_field;
-	
-	@FindBy (css = "")
+
+	@FindBy (css = "[id=\"4363569\"]")
 	WebElement question_DD;
-	
-	@FindBy (css = "")
+
+	@FindBy (xpath = "//*[@id='4363569']/option[8]")
 	WebElement answers_DD;
-	
-	@FindBy (css = "")
+
+	@FindBy (css = "#section_4363569 > input.hidden-field.form-control")
 	WebElement description_field;
-	
-	@FindBy (css = "")
+
+	@FindBy (css = "#answer_4363568-8")
 	WebElement recommend_rating_elem;
-	
-	@FindBy (css = "")
+
+	@FindBy (css = "div.col-sm-4.col-sm-push-8 > input")
 	WebElement submit_btn;
-	
-	@FindBy (css = "")
+
+	@FindBy (css = "#int-thankyou-heading")
 	WebElement thanking_text;
-	
-	@FindBy (css = "")
+
+	@FindBy (css = "[data-close='Close']")
 	WebElement closing_btn;
-	
+
 	public String getTitle() {
 		return driver.getTitle();
 	}
-	
+
 	public void feedback_webStore() {
 		overAll_rating_elem.click();
-		comments_field.sendKeys(comment);
+		comments_field.sendKeys("I like Indigo!!!");
 		question_DD.click();
 		answers_DD.click();
 		recommend_rating_elem.click();
 		submit_btn.click();
-		thanking_text.getText();
-		closing_btn.click();
+		wait.until(ExpectedConditions.elementToBeClickable(closing_btn));
 	}
 
 }

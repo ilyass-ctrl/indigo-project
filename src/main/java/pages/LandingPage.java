@@ -5,26 +5,35 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class LandingPage {
-	
+
 	protected WebDriver driver = null;
 
 	public LandingPage(WebDriver driver) {
 		this.driver = driver; 
 	}
-	
-	
-	@FindBy (css ="")
+
+	@FindBy (css ="[aria-label='Close Popup']")
+	WebElement closePopUp_Btn;
+
+	@FindBy (css ="#oo_tab")
 	WebElement feedBack_Btn;
-	
-	@FindBy (css ="")
+
+	@FindBy (css ="#waypoint_icons > a:nth-child(1)")
 	WebElement webSite_feedBack_Btn;
-	
-	
+
+
 	public String getTitle() {
 		return driver.getTitle();
 	}
-	
-	public void click_btn() {
+
+	public void popUpClosing() {
+		if(closePopUp_Btn.isDisplayed()) {
+			closePopUp_Btn.click();
+		} 
+	}
+
+	public void select_webStite_feedBack() {
+
 		feedBack_Btn.click();
 		webSite_feedBack_Btn.click();
 	}
